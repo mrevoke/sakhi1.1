@@ -35,7 +35,12 @@ dependencies:
   firebase_core: ^2.3.0
   flutter:
     sdk: flutter
+  geolocator: ^9.0.2
   shared_preferences: ^2.0.15
+  awesome_notifications: ^0.7.4+1
+  url_launcher: ^6.1.10 
+  scroll_snap_list: ^0.9.1
+  http: ^0.13.5
 
 dev_dependencies:
 
@@ -47,7 +52,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-
+  shared_preferences: ^2.0.13
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
@@ -59,7 +64,7 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
+    - assets/images/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

@@ -1,9 +1,15 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:chatapp/pages/group_info.dart';
 import 'package:chatapp/service/database_service.dart';
 import 'package:chatapp/widgets/message_tile.dart';
 import 'package:chatapp/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatPage extends StatefulWidget {
   final String groupId;
@@ -93,7 +99,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    sendMessage();
+                    _getLocation();
                   },
                   child: Container(
                     height: 50,
@@ -118,6 +124,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   chatMessages() {
+    triggerNotification();
     return StreamBuilder(
       stream: chats,
       builder: (context, AsyncSnapshot snapshot) {
@@ -150,5 +157,46 @@ class _ChatPageState extends State<ChatPage> {
         messageController.clear();
       });
     }
+  }
+
+  Future<void> _getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    print("Latitude: ${position.latitude}");
+    print("Longitude: ${position.longitude}");
+
+    Map<String, String> datatosave = {
+      'lattitude': "Latitude: ${position.latitude}",
+      'longitude': "Longitude: ${position.longitude}"
+    };
+    FirebaseFirestore.instance.collection('location');
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? Phone = prefs.getString("Start");
+
+    if (messageController.text.isNotEmpty) {
+      Map<String, dynamic> chatMessageMap = {
+        "message":
+            "${messageController.text} HELP Latitude: ${position.latitude} Longitude: ${position.longitude}",
+        "sender": widget.userName,
+        "time": DateTime.now().millisecondsSinceEpoch,
+      };
+
+      DatabaseService().sendMessage(widget.groupId, chatMessageMap);
+      setState(() {
+        messageController.clear();
+      });
+    }
+  }
+
+  void triggerNotification() {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: 5,
+          channelKey: 'basic_channel',
+          title: 'someone in need',
+          body: 'help her asap'),
+    );
   }
 }

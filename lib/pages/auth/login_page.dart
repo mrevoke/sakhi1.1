@@ -1,6 +1,7 @@
 import 'package:chatapp/helper/helper_function.dart';
 import 'package:chatapp/pages/auth/register_page.dart';
 import 'package:chatapp/pages/home_page.dart';
+import 'package:chatapp/pages/sakhihomepage.dart';
 import 'package:chatapp/service/auth_service.dart';
 import 'package:chatapp/service/database_service.dart';
 import 'package:chatapp/widgets/widgets.dart';
@@ -8,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,8 +20,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
+  TextEditingController phonecont = TextEditingController();
 
   String email = "";
+  String phone = "";
   String password = "";
   bool _isLoading = false;
   AuthService authService = AuthService();
@@ -40,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Groupie",
+                  "Sakhi",
                   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
@@ -72,7 +76,33 @@ class _LoginPageState extends State<LoginPage> {
                         : "Please enter a valid email";
                   },
                 ),
+                const SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  controller: phonecont,
+                  obscureText: true,
+                  decoration: textInputDecoration.copyWith(
+                      labelText: "Phone no.",
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Theme.of(context).primaryColor,
+                      )),
+                  validator: (val) {
+                    if (val!.length < 6) {
+                      return "Phone no. inaccurate";
+                    } else {
+                      return null;
+                    }
+                  },
+                  onChanged: (val) => {
+                    setState(() {
+                      phone = val;
 
+                      // print("Password $password ");
+                    })
+                  },
+                ),
                 const SizedBox(
                   height: 15,
                 ),
@@ -114,7 +144,12 @@ class _LoginPageState extends State<LoginPage> {
                       "Sign In",
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+
+                      await prefs.setString('Start', phonecont.text);
+
                       login();
                     },
                   ),
@@ -160,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
           await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
-          nextScreenReplace(context, const HomePage());
+          nextScreenReplace(context, sakhihomepage());
         } else {
           showSnackbar(context, Colors.red, value);
           setState(() {

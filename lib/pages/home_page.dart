@@ -1,6 +1,9 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:chatapp/helper/helper_function.dart';
 import 'package:chatapp/pages/auth/login_page.dart';
 import 'package:chatapp/pages/profile_page.dart';
+import 'package:chatapp/pages/safetytips.dart';
+import 'package:chatapp/pages/sakhihomepage.dart';
 import 'package:chatapp/pages/search_page.dart';
 import 'package:chatapp/service/auth_service.dart';
 import 'package:chatapp/service/database_service.dart';
@@ -8,6 +11,12 @@ import 'package:chatapp/widgets/group_tile.dart';
 import 'package:chatapp/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'Articles.dart';
+import 'ComplaintCounter.dart';
+import 'courses.dart';
+import 'helpline.dart';
+import 'news.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -26,6 +35,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+
     super.initState();
     gettingUserData();
   }
@@ -62,24 +77,69 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget _buildButton(BuildContext context, String text,
+        {Color textColor = Colors.white, VoidCallback? onPressed}) {
+      return ElevatedButton(
+        child: Text(text, style: TextStyle(color: textColor)),
+        onPressed: onPressed,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                nextScreen(context, const SearchPage());
-              },
-              icon: const Icon(
-                Icons.search,
-              ))
-        ],
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
-          "Groups",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 27),
+        backgroundColor: const Color(0xffd9d5d5),
+        title: Row(
+          children: [
+            const Text("Sakhi", style: TextStyle(color: Colors.black)),
+            const SizedBox(width: 657.0),
+            Row(
+              children: [
+                _buildButton(context, "Home", textColor: Colors.black,
+                    onPressed: () {
+                  nextScreenReplace(context, sakhihomepage());
+                }),
+                const SizedBox(width: 8.0),
+                _buildButton(context, "Articles", textColor: Colors.black,
+                    onPressed: () {
+                  nextScreenReplace(context, Articles());
+                }),
+                const SizedBox(width: 8.0),
+                _buildButton(context, "Courses", textColor: Colors.black,
+                    onPressed: () {
+                  {
+                    nextScreen(context, courses());
+                  }
+                }),
+                const SizedBox(width: 8.0),
+                _buildButton(context, "Complaint Counter",
+                    textColor: Colors.black, onPressed: () {
+                  nextScreenReplace(context, complaincounter());
+                }),
+                SizedBox(
+                  width: 8.0,
+                ),
+                _buildButton(context, "HelpLine", textColor: Colors.black,
+                    onPressed: () {
+                  nextScreenReplace(context, helplinepage());
+                }),
+                const SizedBox(width: 8.0),
+                _buildButton(context, "Safety tips", textColor: Colors.black,
+                    onPressed: () {
+                  nextScreenReplace(
+                    context,
+                    safetytipspage(),
+                  );
+                }),
+                SizedBox(
+                  width: 8.0,
+                ),
+                _buildButton(context, "News", textColor: Colors.black,
+                    onPressed: () {
+                  nextScreenReplace(context, Newspage());
+                }),
+              ],
+            ),
+          ],
         ),
       ),
       drawer: Drawer(
