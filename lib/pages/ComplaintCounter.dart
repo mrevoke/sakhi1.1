@@ -100,7 +100,7 @@ class complaincounter extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 24, 4, 243),
                     width: 1.0,
                   ),
                 ),
@@ -124,7 +124,7 @@ class complaincounter extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 13, 17, 233),
                     width: 1.0,
                   ),
                 ),
@@ -148,7 +148,7 @@ class complaincounter extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 13, 42, 234),
                     width: 1.0,
                   ),
                 ),
@@ -173,17 +173,22 @@ class complaincounter extends StatelessWidget {
                 child: Container(
                   child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 135, 137, 134)),
+                          backgroundColor: Color.fromARGB(255, 47, 7, 226)),
                       onPressed: () {
                         _getLocation();
 
                         _showToast(context);
                       },
-                      icon: Icon(Icons.mail),
+                      icon: Icon(
+                        Icons.mail,
+                        color: Colors.blue,
+                      ),
                       label: Text(
-                        'Send',
+                        'Submit',
                         style: TextStyle(
-                            fontSize: 23, fontWeight: FontWeight.bold),
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold),
                       )),
                 ),
               ),

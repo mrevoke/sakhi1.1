@@ -32,7 +32,7 @@ class SnappingList extends StatefulWidget {
 class _SnappingListState extends State<SnappingList> {
   List<Product> productList = [
     Product(
-        'Lounge Manager At Delhi Airport Arrested In Sexual Harassment Case: Cops',
+        'Lounge Manager At Delhi Airport Arrested In Sexual Harassment',
         'A 42-year-old general manager of a lounge at the Delhi airport and his '
             '37-yearold colleague were\n arrested on Thursday after a woman employee'
             ' accused them of sexual harassment at the workplace\n police said. The'
@@ -222,8 +222,7 @@ class _SnappingListState extends State<SnappingList> {
   @override
   Widget build(BuildContext context) {
     Widget _buildButton(BuildContext context, String text,
-        {Color textColor = Color.fromARGB(255, 255, 255, 255),
-        VoidCallback? onPressed}) {
+        {Color textColor = Colors.white, VoidCallback? onPressed}) {
       return ElevatedButton(
         child: Text(text, style: TextStyle(color: textColor)),
         onPressed: onPressed,
@@ -291,6 +290,7 @@ class _SnappingListState extends State<SnappingList> {
         body: SizedBox(
           height: 900,
           child: ScrollSnapList(
+            margin: EdgeInsets.all(15),
             itemBuilder: _buildListItem,
             itemCount: productList.length,
             itemSize: 905,
@@ -306,9 +306,12 @@ class _SnappingListState extends State<SnappingList> {
       width: 950,
       height: 850,
       child: Card(
+        borderOnForeground: true,
+        color: Color.fromARGB(225, 143, 177,
+            223), ////////////////////////////////////////////////
         elevation: 12,
         child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(30)),
           child: Column(
             children: [
               const SizedBox(
@@ -316,8 +319,10 @@ class _SnappingListState extends State<SnappingList> {
               ),
               Text(
                 product.title,
-                style:
-                    const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 38, 66, 94)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -329,7 +334,7 @@ class _SnappingListState extends State<SnappingList> {
                       child: Text(
                         product.cost,
                         style: const TextStyle(
-                            fontSize: 20, color: Colors.blueGrey),
+                            fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                       ),
                     ),
                   ],

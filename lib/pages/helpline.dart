@@ -25,7 +25,7 @@ class HelplineScreen extends StatelessWidget {
     {'name': 'Police', 'number': '112 / 100'},
     {
       'name':
-          'National Commison For Women (NCW) ( Domestic voilence 24x7 helpline for Sexual Voilence and harrashment )',
+          'National Commison For Women (NCW) ( Domestic voilence 24x7 helpline )',
       'number': '7827170170'
     },
     {
@@ -112,42 +112,50 @@ class HelplineScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: helplines.length + 1,
-        itemBuilder: (BuildContext context, int index) {
-          if (index == 0) {
-            // return the heading
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-              child: Text(
-                'Helpline no',
-                style: TextStyle(
-                  fontSize: 35.0,
-                  fontWeight: FontWeight.bold,
+      body: Center(
+        child: ListView.builder(
+          itemCount: helplines.length + 1,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              // return the heading
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                child: Center(
+                  child: Text(
+                    'Helpline number',
+                    style: TextStyle(
+                      fontSize: 35.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
-            );
-          } else {
-            // return a row with the name and number
-            final helpline = helplines[index - 1];
-            return ListTile(
-              title: Text(
-                helpline['name']!,
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.normal,
+              );
+            } else {
+              // return a row with the name and number
+              final helpline = helplines[index - 1];
+              return ListTile(
+                title: Center(
+                  child: Text(
+                    helpline['name']!,
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                helpline['number']!,
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.normal,
+                subtitle: Center(
+                  child: Text(
+                    helpline['number']!,
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 ),
-              ),
-            );
-          }
-        },
+              );
+            }
+          },
+        ),
       ),
     );
   }

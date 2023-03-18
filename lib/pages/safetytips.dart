@@ -30,13 +30,17 @@ class _MyCardState extends State<MyCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Color.fromARGB(225, 143, 177, 213),
       // ignore: sort_child_properties_last
       child: Column(
         children: <Widget>[
           ListTile(
             title: Text(
               widget.title,
-              style: const TextStyle(fontSize: 24.0),
+              style: const TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.w300,
+              ),
             ),
             trailing: IconButton(
               icon: Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
@@ -49,7 +53,7 @@ class _MyCardState extends State<MyCard> {
           ),
           if (isExpanded)
             Padding(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.all(12),
               child: Text(
                 widget.description,
                 style: const TextStyle(fontSize: 18.0),
@@ -151,8 +155,10 @@ class safetytipspage extends StatelessWidget {
                   SizedBox(
                     width: 8.0,
                   ),
-                  _buildButton(context, "HelpLine",
-                      textColor: Colors.black, onPressed: () {}),
+                  _buildButton(context, "HelpLine", textColor: Colors.black,
+                      onPressed: () {
+                    nextScreenReplace(context, helplinepage());
+                  }),
                   const SizedBox(width: 8.0),
                   _buildButton(context, "Safety tips", textColor: Colors.black,
                       onPressed: () {
