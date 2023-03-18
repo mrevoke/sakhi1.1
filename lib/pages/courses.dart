@@ -105,8 +105,9 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           children: [
             Card(
+              color: Color.fromARGB(225, 143, 177, 213),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(26.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -114,7 +115,8 @@ class MyHomePage extends StatelessWidget {
                       "Why YOU'LL ENROLL FOR Sexual Harassment Course?",
                       style: TextStyle(
                         fontSize: 25.0,
-                        color: Colors.blue, // Change the color to blue
+                        color: Color.fromARGB(
+                            255, 11, 104, 180), // Change the color to blue
                         fontWeight: FontWeight.bold, // Add bold font weight
                       ),
                     ),

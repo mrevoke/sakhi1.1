@@ -1,10 +1,18 @@
+import 'dart:html';
+import 'dart:typed_data';
+
 import 'package:chatapp/helper/helper_function.dart';
+import 'package:chatapp/pages/auth/emaiverify.dart';
 import 'package:chatapp/pages/auth/login_page.dart';
 import 'package:chatapp/pages/home_page.dart';
 import 'package:chatapp/service/auth_service.dart';
 import 'package:chatapp/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import 'emaiverify.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -21,6 +29,51 @@ class _RegisterPageState extends State<RegisterPage> {
   String fullName = "";
   bool _isLoading = false;
   AuthService authService = AuthService();
+  File? _file;
+  Uint8List? _bytes;
+  String? _error;
+  bool _isLoadings = false;
+
+  void _pickFile() {
+    FileUploadInputElement uploadInput = FileUploadInputElement();
+    uploadInput.click();
+
+    uploadInput.onChange.listen((event) {
+      final file = uploadInput.files!.first;
+      final reader = FileReader();
+      reader.readAsArrayBuffer(file);
+      reader.onLoad.listen((event) {
+        setState(() {
+          _file = file;
+          _bytes = reader.result as Uint8List?;
+        });
+      });
+    });
+  }
+
+  void _uploadFile() async {
+    setState(() {
+      _isLoadings = true;
+    });
+
+    try {
+      final folderName = email.replaceAll('@', '').replaceAll('.', '');
+      final fileName = _file!.name;
+
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child('$folderName/$fileName');
+      UploadTask uploadTask = storageReference.putData(_bytes!);
+      await uploadTask.whenComplete(() => print('File uploaded.'));
+    } on FirebaseException catch (e) {
+      setState(() {
+        _error = e.message;
+      });
+    } finally {
+      setState(() {
+        _isLoadings = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
-                        "Groupie",
+                        "Sakhi",
                         style: TextStyle(
                             fontSize: 40, fontWeight: FontWeight.bold),
                       ),
@@ -51,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 10,
                       ),
                       const Text(
-                        "Create your account now to chat and explore",
+                        "a friend in need is a friend in deed",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w400),
                       ),
@@ -164,7 +217,23 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ..onTap = () {
                                     nextScreen(context, const LoginPage());
                                   }),
-                          ]))
+                          ])),
+                      SizedBox(height: 40.0),
+
+                      // SizedBox(height: 16),
+                      // ElevatedButton(
+                      //   onPressed: _pickFile,
+                      //   child: Text('Select File'),
+                      // ),
+                      // SizedBox(height: 16),
+                      // _isLoading
+                      //     ? CircularProgressIndicator()
+                      //     : ElevatedButton(
+                      //         onPressed: _file == null ? null : _uploadFile,
+                      //         child: Text('Upload'),
+                      //       ),
+                      // if (_error != null) Text(_error!),
+                      // SizedBox(height: 16.0),
                     ],
                   ),
                 ),
@@ -186,7 +255,15 @@ class _RegisterPageState extends State<RegisterPage> {
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
           await HelperFunctions.saveUserNameSF(fullName);
-          nextScreenReplace(context, const HomePage());
+
+          final user = FirebaseAuth.instance.currentUser;
+          await user?.sendEmailVerification();
+          Navigator.push(
+            // Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EmailVerified()),
+          );
+          // nextScreenReplace(context, const HomePage());
         } else {
           showSnackbar(context, Colors.red, value);
           setState(() {

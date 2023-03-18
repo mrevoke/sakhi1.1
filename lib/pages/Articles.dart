@@ -162,7 +162,7 @@ class CardWidget1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color.fromARGB(255, 188, 185, 185), // set the color to grey
+      color: const Color.fromARGB(255, 143, 177, 213), // set the color to grey
       child: Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

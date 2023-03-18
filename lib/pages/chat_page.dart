@@ -179,7 +179,8 @@ class _ChatPageState extends State<ChatPage> {
     if (messageController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
         "message":
-            "${messageController.text} HELP Latitude: ${position.latitude} Longitude: ${position.longitude}",
+            "${messageController.text} HELP Latitude: ${position.latitude} Longitude: ${position.longitude}" +
+                ' https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
         "sender": widget.userName,
         "time": DateTime.now().millisecondsSinceEpoch,
       };

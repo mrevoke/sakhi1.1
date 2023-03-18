@@ -1,3 +1,4 @@
+import 'package:chatapp/helper/helper_function.dart';
 import 'package:chatapp/pages/ComplaintCounter.dart';
 import 'package:chatapp/pages/chatbot.dart';
 import 'package:chatapp/pages/group_chat.dart';
@@ -48,7 +49,8 @@ Future<void> _getLocation2() async {
           'phone': Phone,
           'loc': 'Help i am being harraased at ' +
               "Latitude: ${position.latitude} " +
-              "Longitude: ${position.longitude}",
+              "Longitude: ${position.longitude}" +
+              'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
           'sender_email': 'ja883526@gmail.com'
         }
       }));
@@ -58,6 +60,7 @@ class sakhihomepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Scrollable Card',
       home: firstHomePage(),
     );
@@ -175,7 +178,10 @@ class firstHomePage extends StatelessWidget {
               child: FloatingActionButton(
                 tooltip: 'Chat with other people',
                 onPressed: () {
-                  nextScreenReplace(context, GroupChat());
+                  nextScreenReplace(
+                      context,
+                      GroupListScreen(
+                          currentUserUid: HelperFunctions.userNameKey));
                 },
                 child: Icon(Icons.chat_bubble_sharp),
               )), //button first

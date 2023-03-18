@@ -42,7 +42,11 @@ dependencies:
   scroll_snap_list: ^0.9.1
   http: ^0.13.5
   flutter_speed_dial: ^6.2.0
-
+  firebase_storage: ^11.0.16
+  google_maps_flutter: ^2.2.5
+  location: ^4.4.0
+  link_text: ^0.2.0
+  
 dev_dependencies:
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -53,7 +57,6 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-  shared_preferences: ^2.0.13
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.

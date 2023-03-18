@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_text/link_text.dart';
 
 class MessageTile extends StatefulWidget {
   final String message;
@@ -62,9 +63,11 @@ class _MessageTileState extends State<MessageTile> {
             const SizedBox(
               height: 8,
             ),
-            Text(widget.message,
-                textAlign: TextAlign.start,
-                style: const TextStyle(fontSize: 16, color: Colors.white))
+            LinkText(
+              widget.message,
+              textAlign: TextAlign.start,
+              //        linkStyle: const TextStyle(fontSize: 16, color: Colors.white))
+            )
           ],
         ),
       ),

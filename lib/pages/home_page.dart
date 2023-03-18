@@ -87,60 +87,16 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xffd9d5d5),
-        title: Row(
-          children: [
-            const Text("Sakhi", style: TextStyle(color: Colors.black)),
-            const SizedBox(width: 657.0),
-            Row(
-              children: [
-                _buildButton(context, "Home", textColor: Colors.black,
-                    onPressed: () {
-                  nextScreenReplace(context, sakhihomepage());
-                }),
-                const SizedBox(width: 8.0),
-                _buildButton(context, "Articles", textColor: Colors.black,
-                    onPressed: () {
-                  nextScreenReplace(context, Articles());
-                }),
-                const SizedBox(width: 8.0),
-                _buildButton(context, "Courses", textColor: Colors.black,
-                    onPressed: () {
-                  {
-                    nextScreen(context, courses());
-                  }
-                }),
-                const SizedBox(width: 8.0),
-                _buildButton(context, "Complaint Counter",
-                    textColor: Colors.black, onPressed: () {
-                  nextScreenReplace(context, complaincounter());
-                }),
-                SizedBox(
-                  width: 8.0,
-                ),
-                _buildButton(context, "HelpLine", textColor: Colors.black,
-                    onPressed: () {
-                  nextScreenReplace(context, helplinepage());
-                }),
-                const SizedBox(width: 8.0),
-                _buildButton(context, "Safety tips", textColor: Colors.black,
-                    onPressed: () {
-                  nextScreenReplace(
-                    context,
-                    safetytipspage(),
-                  );
-                }),
-                SizedBox(
-                  width: 8.0,
-                ),
-                _buildButton(context, "News", textColor: Colors.black,
-                    onPressed: () {
-                  nextScreenReplace(context, Newspage());
-                }),
-              ],
+        actions: [
+          IconButton(
+            onPressed: () {
+              nextScreen(context, SearchPage());
+            },
+            icon: const Icon(
+              Icons.search,
             ),
-          ],
-        ),
+          )
+        ],
       ),
       drawer: Drawer(
           child: ListView(
@@ -243,12 +199,12 @@ class _HomePageState extends State<HomePage> {
       body: groupList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          popUpDialog(context);
+          nextScreenReplace(context, sakhihomepage());
         },
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(
-          Icons.add,
+          Icons.home,
           color: Colors.white,
           size: 30,
         ),

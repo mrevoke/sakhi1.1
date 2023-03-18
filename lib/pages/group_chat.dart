@@ -1,35 +1,42 @@
-import 'package:chatapp/helper/helper_function.dart';
-import 'package:chatapp/pages/safetytips.dart';
 import 'package:chatapp/pages/sakhihomepage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'chat_screen.dart';
+import 'create_group.dart';
+import 'package:chatapp/pages/ComplaintCounter.dart';
+import 'package:chatapp/pages/news.dart';
+import 'package:chatapp/pages/safetytips.dart';
 
 import '../widgets/widgets.dart';
 import 'Articles.dart';
-import 'ComplaintCounter.dart';
 import 'courses.dart';
 import 'helpline.dart';
-import 'news.dart';
-import 'chat_page.dart';
 
-class GroupChat extends StatefulWidget {
+class GroupListScreen extends StatefulWidget {
+  final String currentUserUid;
+
+  GroupListScreen({Key? key, required this.currentUserUid}) : super(key: key);
+
   @override
-  _GroupChatState createState() => _GroupChatState();
+  _GroupListScreenState createState() => _GroupListScreenState();
 }
 
-class _GroupChatState extends State<GroupChat> {
-  final TextEditingController _textEditingController = TextEditingController();
+class _GroupListScreenState extends State<GroupListScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String _collectionName = 'group_messages';
-  final String _userName = HelperFunctions.userNameKey;
-  void _sendMessage(String message) {
-    if (message.isNotEmpty) {
-      _textEditingController.clear();
-      _firestore.collection(_collectionName).add({
-        'text': message,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-      });
-    }
+
+  void _createGroup(String name, String description) async {
+    final newGroupRef = await _firestore.collection('groups').add({
+      'name': name,
+      'description': description,
+      'members': [widget.currentUserUid], // add current user as member
+    });
+    final newGroupId = newGroupRef.id;
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => ChatScreen(
+        groupId: newGroupId,
+        groupName: name,
+      ),
+    ));
   }
 
   @override
@@ -43,7 +50,6 @@ class _GroupChatState extends State<GroupChat> {
     }
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 179, 202, 226),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 88, 148, 221),
         title: Row(
@@ -100,67 +106,53 @@ class _GroupChatState extends State<GroupChat> {
           ],
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: _firestore
-                  .collection(_collectionName)
-                  .orderBy('timestamp')
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return ListView(
-                  children:
-                      snapshot.data!.docs.map((DocumentSnapshot document) {
-                    final data = document.data() as Map<String, dynamic>?;
-                    final text = data != null ? data['text'] as String? : null;
-                    if (text == null) {
-                      return SizedBox.shrink();
-                    }
-                    return ListTile(
-                      subtitle: Text(text),
-                      title: Text(_userName),
-                    );
-                  }).toList(),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _firestore
+            .collection('groups')
+            .where('members', arrayContains: widget.currentUserUid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final List<QueryDocumentSnapshot> docs = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: docs.length,
+              itemBuilder: (context, index) {
+                final doc = docs[index];
+                final data = doc.data() as Map<String, dynamic>;
+                return ListTile(
+                  title: Text(data['name'] ?? ''),
+                  subtitle: Text(data['description'] ?? ''),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ChatScreen(
+                        groupId: doc.id,
+                        groupName: data['name'] ?? '',
+                      ),
+                    ));
+                  },
                 );
               },
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CreateGroupScreen(
+              onCreateGroup: _createGroup,
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: Colors.grey,
-                  width: 0.5,
-                ),
-              ),
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    controller: _textEditingController,
-                    decoration: InputDecoration(
-                      hintText: 'Type your message',
-                    ),
-                    onSubmitted: (value) =>
-                        _sendMessage(value), // send message with enter key
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () => _sendMessage(_textEditingController.text),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ));
+        },
       ),
     );
   }
