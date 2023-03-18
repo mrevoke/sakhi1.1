@@ -20,9 +20,9 @@ class Articles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 179, 202, 226),
       appBar: AppBar(
-        backgroundColor: const Color(0xffd9d5d5),
+        backgroundColor: Color.fromARGB(255, 88, 148, 221),
         title: Row(
           children: [
             const Text("Sakhi", style: TextStyle(color: Colors.black)),

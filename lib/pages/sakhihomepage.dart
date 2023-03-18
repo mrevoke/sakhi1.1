@@ -1,5 +1,6 @@
 import 'package:chatapp/pages/ComplaintCounter.dart';
 import 'package:chatapp/pages/chatbot.dart';
+import 'package:chatapp/pages/group_chat.dart';
 import 'package:chatapp/pages/home_page.dart';
 import 'package:chatapp/pages/news.dart';
 import 'package:chatapp/pages/safetytips.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 import 'dart:async';
-
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -108,9 +109,9 @@ class firstHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 194, 194, 194),
+      backgroundColor: Color.fromARGB(255, 179, 202, 226),
       appBar: AppBar(
-        backgroundColor: const Color(0xffd9d5d5),
+        backgroundColor: Color.fromARGB(255, 88, 148, 221),
         title: Row(
           children: [
             const Text("Sakhi", style: TextStyle(color: Colors.black)),
@@ -165,13 +166,33 @@ class firstHomePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          nextScreenReplace(context, chatbot());
-        },
-        backgroundColor: Color.fromARGB(255, 75, 0, 251),
-        child: const Icon(Icons.chat_bubble_outline_outlined),
-        tooltip: 'talk to chatbot',
+      floatingActionButton: Wrap(
+        //will break to another line on overflow
+        direction: Axis.horizontal, //use vertical to show  on vertical axis
+        children: <Widget>[
+          Container(
+              margin: EdgeInsets.all(10),
+              child: FloatingActionButton(
+                tooltip: 'Chat with other people',
+                onPressed: () {
+                  nextScreenReplace(context, GroupChat());
+                },
+                child: Icon(Icons.chat_bubble_sharp),
+              )), //button first
+
+          Container(
+              margin: EdgeInsets.all(10),
+              child: FloatingActionButton(
+                tooltip: 'Chat with AI counsellor',
+                onPressed: () {
+                  nextScreenReplace(
+                      context, chatbot()); //action code for button 2
+                },
+                backgroundColor: Colors.deepPurpleAccent,
+                child: Icon(Icons.task_alt_sharp),
+              )), // button second
+          // Add more buttons here
+        ],
       ),
       body: Column(
         mainAxisAlignment:
@@ -189,7 +210,9 @@ class firstHomePage extends StatelessWidget {
               style: TextStyle(color: Colors.black, fontSize: 24)),
           const SizedBox(height: 32.0),
           ElevatedButton(
-            child: const Text("Help"),
+            child: const Text(
+              "Help",
+            ),
             style: ElevatedButton.styleFrom(primary: const Color(0xff131313)),
             onPressed: () {
               _showHelpDialog(context);

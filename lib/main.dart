@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import "package:flutter/material.dart";
 import './shared/constants.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'pages/firebase_options.dart';
 
 void main() async {
   AwesomeNotifications().initialize(
@@ -29,7 +30,7 @@ void main() async {
             messagingSenderId: Constants.messagingSenderId,
             projectId: Constants.projectId));
   } else {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   }
 
   runApp(MyApp());

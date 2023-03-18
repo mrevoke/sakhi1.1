@@ -222,7 +222,8 @@ class _SnappingListState extends State<SnappingList> {
   @override
   Widget build(BuildContext context) {
     Widget _buildButton(BuildContext context, String text,
-        {Color textColor = Colors.white, VoidCallback? onPressed}) {
+        {Color textColor = Color.fromARGB(255, 255, 255, 255),
+        VoidCallback? onPressed}) {
       return ElevatedButton(
         child: Text(text, style: TextStyle(color: textColor)),
         onPressed: onPressed,
@@ -230,8 +231,9 @@ class _SnappingListState extends State<SnappingList> {
     }
 
     return Scaffold(
+        backgroundColor: Color.fromARGB(255, 179, 202, 226),
         appBar: AppBar(
-          backgroundColor: const Color(0xffd9d5d5),
+          backgroundColor: Color.fromARGB(255, 88, 148, 221),
           title: Row(
             children: [
               const Text("Sakhi", style: TextStyle(color: Colors.black)),
